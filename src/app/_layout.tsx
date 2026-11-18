@@ -1,18 +1,27 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useColorScheme } from 'react-native';
+import * as Notifications from 'expo-notifications';
+import {Stack}from 'expo-router';
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
+//Ensure notifications show up when the app is in the foreground
+Notifications.setNotificationHandler({
+  handleNotification: async ()=> ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+    shouldShowBanner: true,
+    shouldShowList: true,
+  }),
+});
 
-SplashScreen.preventAutoHideAsync();
+export default function Rootlayout() {
+  return(
+  <Stack>
+    <Stack.Screen 
+     name = "(tabs)"
+     options = {{headerShown: false}}/>
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
-    </ThemeProvider>
+     <Stack.Screen
+      name = "add-task"
+      options = {{presentation:'modal', title : 'Add New task'}}/>
+  </Stack>
   );
 }
