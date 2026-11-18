@@ -1,56 +1,60 @@
-# Welcome to your Expo app 👋
+## About the App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+TasksHub is a simple task manager built with React Native and Expo. It was created to demonstrate how data can be stored on the device so that it survives app restarts, how local notifications are triggered, and how images are selected from the device gallery. The app consists of two tabs (Dashboard and Profile) and a modal screen for adding tasks.
 
-## Get started
+## Features
 
-1. Install dependencies
+Tasks can be added with a name and description. They are saved locally with AsyncStorage and displayed on the Dashboard, which refreshes every time it comes into focus. A local notification is shown when a task is saved successfully. On the Profile screen, a student name, student ID and profile picture can be saved, and the picture is chosen from the device gallery with the image picker. All stored data can be cleared with a single button.
 
-   ```bash
-   npm install
-   ```
+## Concepts Covered
 
-2. Start the app
+- Component state (`useState`) compared with persistent storage (AsyncStorage)
+- Storing and retrieving object arrays using `JSON.stringify()` and `JSON.parse()`
+- Hybrid file-based routing with Expo Router (Tabs + Stack modal)
+- Local notifications using `expo-notifications`
+- Gallery access and permissions using `expo-image-picker`
+- Screen refresh using `useFocusEffect`
 
-   ```bash
-   npx expo start
-   ```
+## Technologies Used
 
-In the output, you'll find options to open the app in a
+React Native, Expo, Expo Router, TypeScript, `@react-native-async-storage/async-storage`, `expo-notifications`, `expo-image-picker`, `@expo/vector-icons`
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Project Structure
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+app/
+├── _layout.tsx          Root stack, notification handler
+├── add-task.tsx         Add Task modal screen (writes data)
+└── (tabs)/
+    ├── _layout.tsx      Bottom tab bar and icons
+    ├── index.tsx        Dashboard (reads data)
+    └── profile.tsx      Profile, image picker, clear data
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Setup and Running
 
-### Other setup steps
+The project was created and the required packages were installed using the following commands:
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+```bash
+npx create-expo-app@latest TasksHub
+cd TasksHub
+npm run reset-project
+npx expo install @react-native-async-storage/async-storage expo-notifications expo-image-picker @expo/vector-icons
+```
 
-## Learn more
+The app is started with:
 
-To learn more about developing your project with Expo, look at the following resources:
+```bash
+npx expo start
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+It can then be opened on a device with Expo Go or a development build. Notifications are best tested on a real device or a development build, because Expo Go has limited notification support on Android.
 
-## Join the community
+## How It Works
 
-Join our community of developers creating universal apps.
+When a task is saved, the existing `tasks` array is read from AsyncStorage, the new task is appended, and the updated array is written back as a JSON string. A local notification is then triggered and the user is returned to the Dashboard, where the list is reloaded from storage. On the Profile screen, the name, ID and image URI are saved under the `studentProfile` key and are restored when the screen is opened. The "Clear All Tasks" button wipes everything stored by the app.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Output Screens
+
+Screenshots of all screens, including the proof of the image picker, are available in the `OutputScreens` folder.
+
